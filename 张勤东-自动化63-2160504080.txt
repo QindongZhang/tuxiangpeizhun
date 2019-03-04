@@ -1,0 +1,43 @@
+图像配准作业代码（matlab）
+pic1=imread('Image A.jpg');
+figure(1)
+imshow(pic1)
+ 
+pic2=imread('Image B.jpg');
+figure(2)
+imshow(pic2)
+ 
+cpselect(pic2,pic1)
+ 
+b=zeros(3,7);
+fixedPoints=fixedPoints';
+b(1,:)=fixedPoints(1,:);
+b(2,:)=fixedPoints(2,:);
+b(3,:)=ones(1,7);
+ 
+a=zeros(3,7);
+movingPoints=movingPoints';
+a(1,:)=movingPoints(1,:);
+a(2,:)=movingPoints(2,:);
+a(3,:)=ones(1,7);
+ 
+h=b*a'*inv(a*a');
+h00=[0.9668 -0.2548 0;0.2575 0.9669 0;-3.7006 713.1861 1];
+h1=affine2d(h00);
+ 
+pic3=uint8(zeros(2736,3648,3));
+pic30=imwarp(pic2,h1);
+figure(3)
+imshow(pic30)
+for i=1:2730
+    for j=1:3231
+        pic3(i,j,:)=pic30(i,j,:);
+    end
+end
+    
+figure(4)
+imshow(pic3)
+ 
+pic5=pic1-pic3;
+figure(5)
+imshow(pic5)
